@@ -1,0 +1,36 @@
+services:
+  bot:
+    build: .
+    container_name: gopher-kicker-bot
+    depends_on:
+      redis:
+        condition: service_healthy
+    env_file:
+      - .env
+    volumes:
+      - ./config:/app/config
+    networks:
+      - app-network
+
+  redis:
+    image: redis:7-alpine
+    restart: always
+    container_name: waybill-redis
+    ports:
+      - "6379:6379"
+    command: redis-server --requirepass ${APP_REDIS_PASSWORD:-mypassword}
+    healthcheck:
+      test: [ "CMD", "redis-cli", "-a", "${APP_REDIS_PASSWORD:-mypassword}", "ping" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    volumes:
+      - redis_data:/data
+    networks:
+      - app-network
+
+volumes:
+  redis_data:
+
+networks:
+  app-network:

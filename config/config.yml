@@ -1,0 +1,15 @@
+env: "development"
+
+telegram:
+  debug: "false"
+
+redis:
+  addr: "localhost:6379"
+  db: 0
+  max_retries: 3
+  dial_timeout: "5s"
+  timeout: "2s"
+
+bot:
+  timeout_sec: 3600     # 1 hour total timeout
+  warn_after_sec: 1800  # 30 minutes before warning
